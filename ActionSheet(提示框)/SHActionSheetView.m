@@ -144,8 +144,18 @@
                 btn.tag =  _otherTitles.count - i - 1;
                 btn.backgroundColor = [UIColor whiteColor];
                 btn.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
-                [btn setTitleColor:kBtnTextColor forState:UIControlStateNormal];
-                [btn setTitle:_otherTitles[btn.tag] forState:UIControlStateNormal];
+                
+                if ([_otherTitles[btn.tag] isKindOfClass:[NSAttributedString class]]) {
+                    
+                    NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithAttributedString:_otherTitles[btn.tag]];
+                    [str addAttributes:@{NSForegroundColorAttributeName:kBtnTextColor} range:NSMakeRange(0, str.length)];
+                    [btn setAttributedTitle:str forState:UIControlStateNormal];
+                }else{
+                    
+                    [btn setTitleColor:kBtnTextColor forState:UIControlStateNormal];
+                    [btn setTitle:_otherTitles[btn.tag] forState:UIControlStateNormal];
+                }
+                
                 [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
                 [btn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
                 [btn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
