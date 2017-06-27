@@ -21,13 +21,18 @@
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    SHActionSheetView *view = [SHActionSheetView showActionSheetWithTitle:@"标题" cancelTitle:@"取消" specialTitle:@"特殊" otherTitles:@[@"1",@"2",@"3",@"4",@"5"] handler:^(SHActionSheetView *actionSheetView, NSInteger buttonIndex) {
+    
+    NSMutableArray *otherArr = [[NSMutableArray alloc]init];
+    for (int i = 0 ; i < 60; i++) {
         
-        NSLog(@"点击了%ld",(long)buttonIndex);
+        [otherArr addObject:[NSString stringWithFormat:@"第%d个",i]];
+    }
+    
+    SHActionSheetView *view = [SHActionSheetView showActionSheetWithTitle:@"这是标题" CancelTitle:@"这是取消按钮" SpecialTitles:@[@"3",@"2"] OtherTitles:otherArr Block:^(SHActionSheetView *actionSheetView, NSInteger buttonIndex) {
+        NSLog(@"点击%ld",(long)buttonIndex);
     }];
     [view show];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

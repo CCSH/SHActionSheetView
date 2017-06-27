@@ -7,55 +7,61 @@
 //
 
 #import "SHActionSheetView.h"
+#import "SHActionSheetViewModel.h"
 
-#define kRowHeight 48.0f
-#define kRowLineHeight 0.5f
-#define kSeparatorHeight 5.0f
+#define mark - 高度
+//头部高度
+#define kSheetHeadHeight 48.0f
+//中间高度
+#define kSheetCellHeight 48.0f
+//下方分割高度
+#define kSheetSeparatorHeight 5.0f
+//底部高度
+#define kSheetFootHeight 48.0f
 
+#pragma mark  - 个数
+//最多展示几个选项
+#define kSheetMaxCellNum 6
+
+#pragma mark  - 字体
 //标题字体大小
-#define kTitleFontSize 13.0f
+#define kSheetTitleFontSize [UIFont systemFontOfSize:13.0f]
 //其他字体大小
-#define kButtonTitleFontSize 17.0f
+#define kSheetOtherFontSize [UIFont systemFontOfSize:17.0f]
 
-//背景颜色
-#define kBackColor [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2]
-
-//提示框下方线颜色
-#define kViewLineColor [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f]
-//下方分割线颜色
-#define kSeparatorColor [UIColor colorWithRed:238.0f/255.0f green:238.0f/255.0f blue:238.0f/255.0f alpha:1.0f]
+#pragma mark  - 颜色
+//蒙版颜色
+#define kSheetMaskColor [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2]
 //选择栏背景颜色
-#define kNormalColor [UIColor whiteColor]
-//选择栏按住背景颜色
-#define kHighlightedColor [UIColor colorWithRed:242.0f/255.0f green:242.0f/255.0f blue:242.0f/255.0f alpha:1.0f]
-
+#define kSheetBackColor [UIColor whiteColor]
+//提示框下方线颜色
+#define kSheetViewLineColor [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f]
+//下方分割线颜色
+#define kSheetSeparatorColor [UIColor colorWithRed:238.0f/255.0f green:238.0f/255.0f blue:238.0f/255.0f alpha:1.0f]
 //头部标题字体颜色
-#define kHeadTitleTextColor [UIColor redColor]
+#define kSheetHeadTextColor [UIColor redColor]
 //特殊按钮字体颜色
-#define kSpecialBtnTextColor [UIColor orangeColor]
+#define kSheetSpecialTextColor [UIColor orangeColor]
 //其他按钮字体颜色
-#define kBtnTextColor [UIColor grayColor]
+#define kSheetOtherTextColor [UIColor grayColor]
 
-@interface SHActionSheetView () {
+@interface SHActionSheetView ()<UITableViewDelegate,UITableViewDataSource> {
     UIView      *_backView;
-    UIView *_actionSheetView;
+    UITableView *_actionSheetView;
     CGFloat _actionSheetHeight;
     BOOL        _isShow;
 }
-//标题
-@property (nonatomic, copy) NSString *title;
-//取消按钮
-@property (nonatomic, copy) NSString *cancelTitle;
-//特殊按钮
-@property (nonatomic, copy) NSString *specialTitle;
-//其他按钮
-@property (nonatomic, copy) NSArray *otherTitles;
+
+//参数
+@property (nonatomic, strong) SHActionSheetViewModel *model;
 //回调
 @property (nonatomic, copy) SHActionSheetViewDidSelectButtonBlock selectRowBlock;
 
 @end
 
 @implementation SHActionSheetView
+
+static NSString * const reuseIdentifier = @"Cell";
 
 - (instancetype)init {
     self = [super init];
@@ -68,141 +74,184 @@
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title cancelTitle:(NSString *)cancelTitle specialTitle:(NSString *)specialTitle otherTitles:(NSArray *)otherTitles handler:(SHActionSheetViewDidSelectButtonBlock)block{
+- (instancetype)initWithTitle:(NSString *)title CancelTitle:(NSString *)cancelTitle SpecialTitles:(NSArray *)specialTitles OtherTitles:(NSArray *)otherTitles Block:(SHActionSheetViewDidSelectButtonBlock)block{
     self = [self init];
     
     if (self)
     {
         //初始化
-        _title = title;
-        _cancelTitle = cancelTitle;
-        _specialTitle = specialTitle;
-        _otherTitles = otherTitles;
+        _model = [[SHActionSheetViewModel alloc]init];
+        //设置标题
+        _model.title = title;
+        //设置按钮
+        _model.otherTitles = otherTitles;
+        //设置特殊按钮
+        _model.specialTitles = specialTitles;
+        //设置取消按钮
+        _model.cancelTitle = cancelTitle;
+        //设置回调
         _selectRowBlock = block;
         
-        //背景
+        //蒙版
         _backView = [[UIView alloc] initWithFrame:self.frame];
-        _backView.backgroundColor = kBackColor;
+        _backView.backgroundColor = kSheetMaskColor;
         _backView.alpha = 0.0f;
         [self addSubview:_backView];
         
+        CGFloat width = self.frame.size.width;
+        CGFloat height = self.frame.size.height;
+        
+        //头部+中间最多个点击+分割线+底部
+        CGFloat headH = _model.title.length?kSheetHeadHeight:0;
+        CGFloat viewH = ((_model.otherTitles.count <= kSheetMaxCellNum)?_model.otherTitles.count:kSheetMaxCellNum)*kSheetCellHeight;
+        CGFloat cancelH = kSheetSeparatorHeight + kSheetFootHeight;
+        _actionSheetHeight = headH + viewH;
+        
         //选择视图
-        _actionSheetView = [[UIView alloc] init];
-        _actionSheetView.backgroundColor = kViewLineColor;
+        _actionSheetView = [[UITableView alloc] initWithFrame:CGRectMake(0,height - _actionSheetHeight - cancelH , width, _actionSheetHeight) style:UITableViewStylePlain];
+        _actionSheetView.backgroundColor = kSheetBackColor;
+        _actionSheetView.delegate = self;
+        _actionSheetView.dataSource = self;
+        _actionSheetView.separatorColor = kSheetViewLineColor;
+        _actionSheetView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 0);
+        _actionSheetView.showsVerticalScrollIndicator = NO;
+        _actionSheetView.bounces = NO;
         [self addSubview:_actionSheetView];
         
-        CGFloat offy = 0;
-        CGFloat width = self.frame.size.width;
+        //下方视图
+        UIView *footView = [[UIView alloc]initWithFrame:CGRectMake(0, height - cancelH, self.frame.size.width, cancelH)];
+        footView.backgroundColor = kSheetBackColor;
         
-        UIImage *normalImage = [self imageWithColor:kNormalColor];
-        UIImage *highlightedImage = [self imageWithColor:kHighlightedColor];
-        
-        //标题
-        if (_title.length)
-        {
-            CGFloat spacing = 15.0f;
-            
-            CGFloat titleHeight = ceil([_title boundingRectWithSize:CGSizeMake(width, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTitleFontSize]} context:nil].size.height) + spacing*2;
-            
-            UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, titleHeight)];
-            titleLabel.backgroundColor = kNormalColor;
-            titleLabel.textColor = kHeadTitleTextColor;
-            titleLabel.textAlignment = NSTextAlignmentCenter;
-            titleLabel.font = [UIFont systemFontOfSize:kTitleFontSize];
-            titleLabel.numberOfLines = 0;
-            titleLabel.text = _title;
-            [_actionSheetView addSubview:titleLabel];
-            
-            offy += titleHeight+kRowLineHeight;
-        }
-        
-        //特殊按钮
-        if (_specialTitle.length)
-        {
-            UIButton *specialBtn= [[UIButton alloc] init];
-            specialBtn.frame = CGRectMake(0, offy, width, kRowHeight);
-            specialBtn.tag = _otherTitles.count;
-            specialBtn.backgroundColor = [UIColor whiteColor];
-            specialBtn.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
-            [specialBtn setTitleColor:kSpecialBtnTextColor forState:UIControlStateNormal];
-            [specialBtn setTitle:_specialTitle forState:UIControlStateNormal];
-            [specialBtn setBackgroundImage:normalImage forState:UIControlStateNormal];
-            [specialBtn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
-            [specialBtn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
-            [_actionSheetView addSubview:specialBtn];
-            
-            offy += kRowHeight+kRowLineHeight;
-        }
-        
-        //其他按钮
-        if (_otherTitles.count)
-        {
-            for (int i = 0; i < _otherTitles.count; i++)
-            {
-                UIButton *btn = [[UIButton alloc] init];
-                btn.frame = CGRectMake(0, offy, width, kRowHeight);
-                btn.tag =  _otherTitles.count - i - 1;
-                btn.backgroundColor = [UIColor whiteColor];
-                btn.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
-                
-                if ([_otherTitles[btn.tag] isKindOfClass:[NSAttributedString class]]) {
-                    
-                    NSMutableAttributedString *str = [[NSMutableAttributedString alloc]initWithAttributedString:_otherTitles[btn.tag]];
-                    [str addAttributes:@{NSForegroundColorAttributeName:kBtnTextColor} range:NSMakeRange(0, str.length)];
-                    [btn setAttributedTitle:str forState:UIControlStateNormal];
-                }else{
-                    
-                    [btn setTitleColor:kBtnTextColor forState:UIControlStateNormal];
-                    [btn setTitle:_otherTitles[btn.tag] forState:UIControlStateNormal];
-                }
-                
-                [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
-                [btn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
-                [btn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
-                [_actionSheetView addSubview:btn];
-                
-                offy += kRowHeight+kRowLineHeight;
-            }
-            
-            offy -= kRowLineHeight;
-        }
-        
-        //分隔线
-        UIView *separatorView = [[UIView alloc] initWithFrame:CGRectMake(0, offy, width, kSeparatorHeight)];
-        separatorView.backgroundColor = kSeparatorColor;
-        [_actionSheetView addSubview:separatorView];
-        
-        offy += kSeparatorHeight;
+        //分割线
+        UIView *separator = [[UIView alloc]initWithFrame:CGRectMake(0, 0, footView.frame.size.width, kSheetSeparatorHeight)];
+        separator.backgroundColor = kSheetSeparatorColor;
+        [footView addSubview:separator];
         
         //取消按钮
-        UIButton *cancelBtn = [[UIButton alloc] init];
-        cancelBtn.frame = CGRectMake(0, offy, width, kRowHeight);
+        UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, kSheetSeparatorHeight, footView.frame.size.width, kSheetFootHeight)];
         cancelBtn.tag = -1;
-        cancelBtn.backgroundColor = kNormalColor;
-        cancelBtn.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
-        [cancelBtn setTitleColor:kBtnTextColor forState:UIControlStateNormal];
-        [cancelBtn setTitle:_cancelTitle?: NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
-        [cancelBtn setBackgroundImage:normalImage forState:UIControlStateNormal];
-        [cancelBtn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
-        [cancelBtn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
-        [_actionSheetView addSubview:cancelBtn];
-        
-        offy += kRowHeight;
-        
-        _actionSheetHeight = offy;
-        
-        _actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), _actionSheetHeight);
+        cancelBtn.opaque = YES;
+        cancelBtn.titleLabel.font = kSheetOtherFontSize;
+        [cancelBtn setTitleColor:kSheetOtherTextColor forState:UIControlStateNormal];
+        [cancelBtn setTitle:self.model.cancelTitle.length?self.model.cancelTitle: NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
+        [cancelBtn addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
+        [footView addSubview:cancelBtn];
+        [self addSubview:footView];
     }
     
     return self;
 }
 
-+ (SHActionSheetView *)showActionSheetWithTitle:(NSString *)title cancelTitle:(NSString *)cancelTitle specialTitle:(NSString *)specialTitle otherTitles:(NSArray *)otherTitles handler:(SHActionSheetViewDidSelectButtonBlock)block{
-    
-    SHActionSheetView *actionSheetView = [[SHActionSheetView alloc] initWithTitle:title cancelTitle:cancelTitle specialTitle:specialTitle otherTitles:otherTitles handler:block];
++ (SHActionSheetView *)showActionSheetWithTitle:(NSString *)title CancelTitle:(NSString *)cancelTitle SpecialTitles:(NSArray *)specialTitles OtherTitles:(NSArray *)otherTitles Block:(SHActionSheetViewDidSelectButtonBlock)block{
+
+    SHActionSheetView *actionSheetView = [[SHActionSheetView alloc] initWithTitle:title CancelTitle:cancelTitle SpecialTitles:specialTitles OtherTitles:otherTitles Block:block];
     return actionSheetView;
 }
 
+#pragma mark - UITableViewDelegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.model.otherTitles.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return self.model.title.length?kSheetHeadHeight:0;
+}
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+//    return 0.1;
+//}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return kSheetCellHeight;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    
+    if (!cell) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    }
+    
+    //设置数据
+    [self setCellDataSoureWithCell:cell IndexPath:indexPath];
+    
+    return cell;
+}
+
+- (void)setCellDataSoureWithCell:(UITableViewCell *)cell IndexPath:(NSIndexPath *)indexPath{
+    
+    cell.textLabel.font = kSheetOtherFontSize;
+    cell.textLabel.textColor = kSheetOtherTextColor;
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    
+    id obj = self.model.otherTitles[indexPath.row];
+    
+    for (NSString *index in self.model.specialTitles) {
+        if ([index intValue] == indexPath.row) {
+            cell.textLabel.textColor = kSheetSpecialTextColor;
+            break;
+        }
+    }
+    
+    if ([obj isKindOfClass:[NSAttributedString class]]) {
+        
+        cell.textLabel.attributedText = obj;
+    }else{
+        cell.textLabel.text = obj;
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    
+    UILabel *headView;
+    
+    if (self.model.title.length) {
+        headView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, kSheetHeadHeight)];
+        headView.backgroundColor = kSheetBackColor;
+        headView.textColor = kSheetHeadTextColor;
+        headView.textAlignment = NSTextAlignmentCenter;
+        headView.font = kSheetOtherFontSize;
+        headView.text = self.model.title;
+        headView.layer.cornerRadius = 1;
+        headView.layer.borderColor = kSheetViewLineColor.CGColor;
+        headView.layer.borderWidth = 0.5;
+    }
+    
+    return headView;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (_selectRowBlock)
+    {
+        _selectRowBlock(self, indexPath.row);
+    }
+    
+    [self dismiss];
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    //禁止下拉
+//    if (_actionSheetView.contentOffset.y <= 0) {
+//        
+//        _actionSheetView.bounces = NO;
+//    } else if (_actionSheetView.contentOffset.y >= 0){
+//        
+//        _actionSheetView.bounces = YES;
+//    }
+}
+
+#pragma mark - 取消点击
+- (void)cancelAction:(UIButton *)button {
+    if (_selectRowBlock)
+    {
+        NSInteger index = button.tag;
+        
+        _selectRowBlock(self, index);
+    }
+    
+    [self dismiss];
+}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
@@ -213,16 +262,6 @@
     }
 }
 
-- (void)didSelectAction:(UIButton *)button {
-    if (_selectRowBlock)
-    {
-        NSInteger index = button.tag;
-        
-        _selectRowBlock(self, index);
-    }
-    
-    [self dismiss];
-}
 
 - (UIImage *)imageWithColor:(UIColor *)color {
     CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
@@ -240,7 +279,6 @@
 
 
 #pragma mark - public
-
 - (void)show {
     if(_isShow) return;
     
@@ -251,7 +289,7 @@
         [[[[UIApplication sharedApplication] delegate] window] addSubview:self];
         _backView.alpha = 1.0;
         
-        _actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame)-_actionSheetHeight, CGRectGetWidth(self.frame), _actionSheetHeight);
+        _actionSheetView.frame = CGRectMake(0,self.frame.size.height - _actionSheetHeight - (kSheetSeparatorHeight + kSheetFootHeight) , self.frame.size.width, _actionSheetHeight);
     } completion:NULL];
 }
 
@@ -262,22 +300,16 @@
         
         _backView.alpha = 0.0;
         
-        _actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), _actionSheetHeight);
+        _actionSheetView.frame = CGRectMake(0,self.frame.size.height , self.frame.size.width, _actionSheetHeight);
         
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
 }
 
-
-
-
 #pragma mark - 销毁
 - (void)dealloc {
-    self.title= nil;
-    self.cancelTitle = nil;
-    self.specialTitle = nil;
-    self.otherTitles = nil;
+    self.model= nil;
     self.selectRowBlock = nil;
     
     _actionSheetView = nil;

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C0C7C061F020B68002827DA /* SHActionSheetViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0C7C051F020B68002827DA /* SHActionSheetViewModel.m */; };
 		5CF6C9DB1EC2BCA900DD8E84 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CF6C9DA1EC2BCA900DD8E84 /* main.m */; };
 		5CF6C9DE1EC2BCA900DD8E84 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CF6C9DD1EC2BCA900DD8E84 /* AppDelegate.m */; };
 		5CF6C9E11EC2BCA900DD8E84 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CF6C9E01EC2BCA900DD8E84 /* ViewController.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5C0C7C041F020B68002827DA /* SHActionSheetViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHActionSheetViewModel.h; sourceTree = "<group>"; };
+		5C0C7C051F020B68002827DA /* SHActionSheetViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHActionSheetViewModel.m; sourceTree = "<group>"; };
 		5CF6C9D61EC2BCA900DD8E84 /* SHActionSheetViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SHActionSheetViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CF6C9DA1EC2BCA900DD8E84 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5CF6C9DC1EC2BCA900DD8E84 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -88,6 +91,8 @@
 			children = (
 				5CF6C9F11EC2BCC100DD8E84 /* SHActionSheetView.h */,
 				5CF6C9F21EC2BCC100DD8E84 /* SHActionSheetView.m */,
+				5C0C7C041F020B68002827DA /* SHActionSheetViewModel.h */,
+				5C0C7C051F020B68002827DA /* SHActionSheetViewModel.m */,
 			);
 			path = "ActionSheet(提示框)";
 			sourceTree = "<group>";
@@ -164,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CF6C9E11EC2BCA900DD8E84 /* ViewController.m in Sources */,
+				5C0C7C061F020B68002827DA /* SHActionSheetViewModel.m in Sources */,
 				5CF6C9DE1EC2BCA900DD8E84 /* AppDelegate.m in Sources */,
 				5CF6C9DB1EC2BCA900DD8E84 /* main.m in Sources */,
 				5CF6C9F31EC2BCC100DD8E84 /* SHActionSheetView.m in Sources */,
@@ -288,8 +294,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SHActionSheetViewDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinwei.SHActionSheetViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -299,8 +307,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SHActionSheetViewDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xinwei.SHActionSheetViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -325,6 +335,7 @@
 				5CF6C9EF1EC2BCA900DD8E84 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
