@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 @class SHActionSheetView;
 
-typedef void (^SHActionSheetViewDidSelectButtonBlock)(SHActionSheetView *actionSheetView, NSInteger buttonIndex);
+typedef void (^SHSelectBlock)(SHActionSheetView *sheetView, NSInteger buttonIndex);
 
 @interface SHActionSheetView : UIView
 
-+ (SHActionSheetView *)showActionSheetWithTitle:(NSString *)title CancelTitle:(NSString *)cancelTitle SpecialTitles:(NSArray *)specialTitles OtherTitles:(NSArray *)otherTitles Block:(SHActionSheetViewDidSelectButtonBlock)block;
++ (SHActionSheetView *)showActionSheetWithTitle:(NSString *)title cancel:(NSString *)cancel messageArr:(NSArray *)messageArr specialArr:(NSArray *)specialArr block:(SHSelectBlock)block;
 
 - (void)show;
 - (void)dismiss;

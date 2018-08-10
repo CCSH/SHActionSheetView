@@ -22,13 +22,13 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     
-    NSMutableArray *otherArr = [[NSMutableArray alloc]init];
+    NSMutableArray *messageArr = [[NSMutableArray alloc]init];
     for (int i = 0 ; i < 60; i++) {
         
-        [otherArr addObject:[NSString stringWithFormat:@"第%d个",i]];
+        [messageArr addObject:[NSString stringWithFormat:@"第%d个",i]];
     }
     
-    SHActionSheetView *view = [SHActionSheetView showActionSheetWithTitle:@"这是标题" CancelTitle:@"这是取消按钮" SpecialTitles:@[@"3",@"2"] OtherTitles:otherArr Block:^(SHActionSheetView *actionSheetView, NSInteger buttonIndex) {
+    SHActionSheetView *view = [SHActionSheetView showActionSheetWithTitle:@"这是标题" cancel:@"这是取消按钮" messageArr:messageArr specialArr:@[@"2",@"3"] block:^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
         NSLog(@"点击%ld",(long)buttonIndex);
     }];
     [view show];
