@@ -90,7 +90,7 @@ static NSString * const reuseIdentifier = @"Cell";
         //设置取消按钮
         self.model.cancel = cancel;
         //设置回调
-        self.selectBlock = block;
+        self.model.selectBlock = block;
         
         //蒙版
         _backView = [[UIView alloc] initWithFrame:self.frame];
@@ -220,8 +220,8 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (self.model.selectBlock)
-    {
+    if (self.model.selectBlock){
+        
         self.model.selectBlock(self, indexPath.row);
     }
     
@@ -268,6 +268,8 @@ static NSString * const reuseIdentifier = @"Cell";
     if(_isShow) return;
     
     _isShow = YES;
+    
+    _actionSheetView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, _actionSheetHeight);
     
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
         
