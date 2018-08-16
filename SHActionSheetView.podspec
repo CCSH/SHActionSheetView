@@ -15,14 +15,14 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-    s.name         = "SHActionSheet"
+    s.name         = "SHActionSheetView"
     s.version      = "0.0.1"
-    s.summary      = "A short description of SHActionSheet."
+    s.summary      = "A short description of SHActionSheetView."
     s.license      = 'MIT'
     s.authors      = {'CSH' => '624089195@qq.com'}
     s.platform     = :ios, '6.0'
-    s.homepage     = 'https://github.com/CCSH/SHActionSheet'
-    s.source       = {:git => 'https://github.com/CCSH/SHActionSheet.git', :tag => s.version}
+    s.homepage     = 'https://github.com/CCSH/SHActionSheetView'
+    s.source       = {:git => 'https://github.com/CCSH/SHActionSheetView.git', :tag => s.version}
     s.source_files = '*'
     s.requires_arc = true
 

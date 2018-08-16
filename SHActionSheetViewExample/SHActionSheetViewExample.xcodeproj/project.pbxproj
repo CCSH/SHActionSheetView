@@ -15,8 +15,8 @@
 		5CC96B37212541E200E78A40 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B36212541E200E78A40 /* main.m */; };
 		5CC96B41212541E200E78A40 /* SHActionSheetViewExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B40212541E200E78A40 /* SHActionSheetViewExampleTests.m */; };
 		5CC96B4C212541E200E78A40 /* SHActionSheetViewExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B4B212541E200E78A40 /* SHActionSheetViewExampleUITests.m */; };
-		5CC96B5E2125422E00E78A40 /* SHActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B5B2125422E00E78A40 /* SHActionSheetView.m */; };
-		5CC96B5F2125422E00E78A40 /* SHActionSheetViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B5C2125422E00E78A40 /* SHActionSheetViewModel.m */; };
+		5CC96B652125476600E78A40 /* SHActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B622125476600E78A40 /* SHActionSheetView.m */; };
+		5CC96B662125476600E78A40 /* SHActionSheetViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B632125476600E78A40 /* SHActionSheetViewModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,10 +53,10 @@
 		5CC96B47212541E200E78A40 /* SHActionSheetViewExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SHActionSheetViewExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CC96B4B212541E200E78A40 /* SHActionSheetViewExampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SHActionSheetViewExampleUITests.m; sourceTree = "<group>"; };
 		5CC96B4D212541E200E78A40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5CC96B5A2125422E00E78A40 /* SHActionSheetViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHActionSheetViewModel.h; sourceTree = "<group>"; };
-		5CC96B5B2125422E00E78A40 /* SHActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHActionSheetView.m; sourceTree = "<group>"; };
-		5CC96B5C2125422E00E78A40 /* SHActionSheetViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHActionSheetViewModel.m; sourceTree = "<group>"; };
-		5CC96B5D2125422E00E78A40 /* SHActionSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHActionSheetView.h; sourceTree = "<group>"; };
+		5CC96B612125476600E78A40 /* SHActionSheetViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHActionSheetViewModel.h; sourceTree = "<group>"; };
+		5CC96B622125476600E78A40 /* SHActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHActionSheetView.m; sourceTree = "<group>"; };
+		5CC96B632125476600E78A40 /* SHActionSheetViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHActionSheetViewModel.m; sourceTree = "<group>"; };
+		5CC96B642125476600E78A40 /* SHActionSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHActionSheetView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +107,7 @@
 		5CC96B26212541E100E78A40 /* SHActionSheetViewExample */ = {
 			isa = PBXGroup;
 			children = (
-				5CC96B592125422E00E78A40 /* SHActionSheet */,
+				5CC96B602125476600E78A40 /* SHActionSheetView */,
 				5CC96B27212541E100E78A40 /* AppDelegate.h */,
 				5CC96B28212541E100E78A40 /* AppDelegate.m */,
 				5CC96B2A212541E100E78A40 /* ViewController.h */,
@@ -139,15 +139,15 @@
 			path = SHActionSheetViewExampleUITests;
 			sourceTree = "<group>";
 		};
-		5CC96B592125422E00E78A40 /* SHActionSheet */ = {
+		5CC96B602125476600E78A40 /* SHActionSheetView */ = {
 			isa = PBXGroup;
 			children = (
-				5CC96B5A2125422E00E78A40 /* SHActionSheetViewModel.h */,
-				5CC96B5C2125422E00E78A40 /* SHActionSheetViewModel.m */,
-				5CC96B5D2125422E00E78A40 /* SHActionSheetView.h */,
-				5CC96B5B2125422E00E78A40 /* SHActionSheetView.m */,
+				5CC96B612125476600E78A40 /* SHActionSheetViewModel.h */,
+				5CC96B622125476600E78A40 /* SHActionSheetView.m */,
+				5CC96B632125476600E78A40 /* SHActionSheetViewModel.m */,
+				5CC96B642125476600E78A40 /* SHActionSheetView.h */,
 			);
-			path = SHActionSheet;
+			path = SHActionSheetView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -282,9 +282,9 @@
 			files = (
 				5CC96B2C212541E100E78A40 /* ViewController.m in Sources */,
 				5CC96B37212541E200E78A40 /* main.m in Sources */,
-				5CC96B5F2125422E00E78A40 /* SHActionSheetViewModel.m in Sources */,
+				5CC96B662125476600E78A40 /* SHActionSheetViewModel.m in Sources */,
 				5CC96B29212541E100E78A40 /* AppDelegate.m in Sources */,
-				5CC96B5E2125422E00E78A40 /* SHActionSheetView.m in Sources */,
+				5CC96B652125476600E78A40 /* SHActionSheetView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
