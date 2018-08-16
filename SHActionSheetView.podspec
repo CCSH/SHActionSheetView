@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
     s.platform     = :ios, '6.0'
     s.homepage     = 'https://github.com/CCSH/SHActionSheetView'
     s.source       = {:git => 'https://github.com/CCSH/SHActionSheetView.git', :tag => s.version}
-    s.source_files = '*'
+    s.source_files = 'SHActionSheetView/**/*.{h,m}'
     s.requires_arc = true
 
 end
