@@ -143,9 +143,9 @@
 			isa = PBXGroup;
 			children = (
 				5CC96B612125476600E78A40 /* SHActionSheetViewModel.h */,
-				5CC96B622125476600E78A40 /* SHActionSheetView.m */,
 				5CC96B632125476600E78A40 /* SHActionSheetViewModel.m */,
 				5CC96B642125476600E78A40 /* SHActionSheetView.h */,
+				5CC96B622125476600E78A40 /* SHActionSheetView.m */,
 			);
 			path = SHActionSheetView;
 			sourceTree = "<group>";

@@ -37,13 +37,13 @@
 //提示框下方线颜色
 #define kSheetViewLineColor [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f]
 //下方分割线颜色
-#define kSheetSeparatorColor [UIColor colorWithRed:238.0f/255.0f green:238.0f/255.0f blue:238.0f/255.0f alpha:1.0f]
+#define kSheetSeparatorColor [UIColor colorWithRed:244.0f/255.0f green:244.0f/255.0f blue:244.0f/255.0f alpha:1.0f]
 //头部标题字体颜色
-#define kSheetHeadTextColor [UIColor redColor]
+#define kSheetHeadTextColor [UIColor blackColor]
 //特殊按钮字体颜色
 #define kSheetSpecialTextColor [UIColor orangeColor]
 //其他按钮字体颜色
-#define kSheetOtherTextColor [UIColor grayColor]
+#define kSheetOtherTextColor [UIColor colorWithRed:38/255.0f green:51/255.0f blue:76/255.0f alpha:1.0f]
 
 @interface SHActionSheetView ()<UITableViewDelegate,UITableViewDataSource> {
     UIView      *_backView;
@@ -70,7 +70,6 @@ static NSString * const reuseIdentifier = @"Cell";
         CGRect frame = [UIScreen mainScreen].bounds;
         self.frame = frame;
     }
-    
     return self;
 }
 
@@ -88,12 +87,12 @@ static NSString * const reuseIdentifier = @"Cell";
         //设置特殊按钮
         self.model.specialArr = specialArr;
         //设置取消按钮
-        self.model.cancel = cancel;
+        self.model.cancel = cancel?:@"取消";
         //设置回调
         self.model.selectBlock = block;
         
         //蒙版
-        _backView = [[UIView alloc] initWithFrame:self.frame];
+        _backView = [[UIView alloc] initWithFrame:self.bounds];
         _backView.backgroundColor = kSheetMaskColor;
         _backView.alpha = 0;
         [self addSubview:_backView];
@@ -103,7 +102,7 @@ static NSString * const reuseIdentifier = @"Cell";
         
         //头部+中间最多个点击+分割线+底部
         CGFloat headH = _model.title.length?kSheetHeadHeight:0;
-        CGFloat viewH = ((_model.messageArr.count <= kSheetMaxCellNum)?_model.messageArr.count:kSheetMaxCellNum)*kSheetCellHeight;
+        CGFloat viewH = ((_model.messageArr.count <= kSheetMaxCellNum)?messageArr.count:kSheetMaxCellNum)*kSheetCellHeight;
         CGFloat cancelH = kSheetSeparatorHeight + kSheetFootHeight;
         _actionSheetHeight = headH + viewH;
         
@@ -132,7 +131,7 @@ static NSString * const reuseIdentifier = @"Cell";
         cancelBtn.tag = -1;
         cancelBtn.opaque = YES;
         cancelBtn.titleLabel.font = kSheetOtherFontSize;
-        [cancelBtn setTitleColor:kSheetOtherTextColor forState:UIControlStateNormal];
+        [cancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [cancelBtn setTitle:self.model.cancel?: NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
         [cancelBtn addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
         [footView addSubview:cancelBtn];
@@ -191,10 +190,12 @@ static NSString * const reuseIdentifier = @"Cell";
         }
     }
     
+    //设置内容
     if ([obj isKindOfClass:[NSAttributedString class]]) {
         
         cell.textLabel.attributedText = obj;
-    }else{
+    }else if ([obj isKindOfClass:[NSString class]]){
+        
         cell.textLabel.text = obj;
     }
 }
@@ -220,8 +221,8 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    //回调
     if (self.model.selectBlock){
-        
         self.model.selectBlock(self, indexPath.row);
     }
     
@@ -230,10 +231,10 @@ static NSString * const reuseIdentifier = @"Cell";
 
 #pragma mark - 取消点击
 - (void)cancelAction:(UIButton *)button {
-    if (self.model.selectBlock)
-    {
+    
+    //回调
+    if (self.model.selectBlock){
         NSInteger index = button.tag;
-        
         self.model.selectBlock(self, index);
     }
     
@@ -241,26 +242,13 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:_backView];
     if (!CGRectContainsPoint([_actionSheetView frame], point))
     {
         [self dismiss];
     }
-}
-
-- (UIImage *)imageWithColor:(UIColor *)color {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
 }
 
 #pragma mark - public
@@ -273,8 +261,8 @@ static NSString * const reuseIdentifier = @"Cell";
     
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
         
-        _actionSheetView.frame = CGRectMake(0,self.frame.size.height - (_actionSheetHeight + kSheetSeparatorHeight + kSheetFootHeight) , self.frame.size.width, _actionSheetHeight);
-        _backView.alpha = 1;
+        self->_actionSheetView.frame = CGRectMake(0,self.frame.size.height - (self->_actionSheetHeight + kSheetSeparatorHeight + kSheetFootHeight) , self.frame.size.width, self->_actionSheetHeight);
+        self->_backView.alpha = 1;
     } completion:NULL];
 }
 
@@ -283,8 +271,8 @@ static NSString * const reuseIdentifier = @"Cell";
     
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
         
-        _backView.alpha = 0.0;
-        _actionSheetView.frame = CGRectMake(0,self.frame.size.height , self.frame.size.width, _actionSheetHeight);
+        self->_backView.alpha = 0.0;
+        self->_actionSheetView.frame = CGRectMake(0,self.frame.size.height , self.frame.size.width, self->_actionSheetHeight);
         
     } completion:^(BOOL finished) {
         [self removeFromSuperview];

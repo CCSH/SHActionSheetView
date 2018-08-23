@@ -194,7 +194,8 @@ static NSString * const reuseIdentifier = @"Cell";
     if ([obj isKindOfClass:[NSAttributedString class]]) {
         
         cell.textLabel.attributedText = obj;
-    }else{
+    }else if ([obj isKindOfClass:[NSString class]]){
+        
         cell.textLabel.text = obj;
     }
 }
@@ -220,8 +221,8 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    //回调
     if (self.model.selectBlock){
-        
         self.model.selectBlock(self, indexPath.row);
     }
     
@@ -230,10 +231,10 @@ static NSString * const reuseIdentifier = @"Cell";
 
 #pragma mark - 取消点击
 - (void)cancelAction:(UIButton *)button {
-    if (self.model.selectBlock)
-    {
+    
+    //回调
+    if (self.model.selectBlock){
         NSInteger index = button.tag;
-        
         self.model.selectBlock(self, index);
     }
     
@@ -241,26 +242,13 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:_backView];
     if (!CGRectContainsPoint([_actionSheetView frame], point))
     {
         [self dismiss];
     }
-}
-
-- (UIImage *)imageWithColor:(UIColor *)color {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
 }
 
 #pragma mark - public
