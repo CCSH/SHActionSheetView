@@ -12,18 +12,35 @@
 //回调
 typedef void (^SHSelectBlock)(SHActionSheetView *sheetView, NSInteger buttonIndex);
 
+
+/**
+ Model
+ */
+@interface SHActionSheetModel : NSObject
+//标题头
+@property (nonatomic, copy) NSString *title;
+//取消按钮(可以为空有默认的)
+@property (nonatomic, copy) NSString *cancel;
+//特殊按钮
+@property (nonatomic, copy) NSArray *specialArr;
+//其他按钮
+@property (nonatomic, copy) NSArray *messageArr;
+
+@end
+
+
+/**
+ 列表弹框
+ */
 @interface SHActionSheetView : UIView
 
 /**
  初始化
 
- @param title 标题
- @param cancel 取消
- @param messageArr 内容(NSString、NSAttributedString)
- @param specialArr 特殊按钮位置集合
+ @param param 数据
  @param block 点击回调
  */
-+ (SHActionSheetView *)showActionSheetWithTitle:(NSString *)title cancel:(NSString *)cancel messageArr:(NSArray *)messageArr specialArr:(NSArray *)specialArr block:(SHSelectBlock)block;
++ (SHActionSheetView *)showActionSheetWithParam:(SHActionSheetModel *)param block:(SHSelectBlock)block;
 
 /**
  显示

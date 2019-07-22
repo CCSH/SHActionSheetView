@@ -7,7 +7,7 @@
 //
 
 #import "SHActionSheetView.h"
-#import "SHActionSheetViewModel.h"
+//#import "SHActionSheetModel.h"
 
 #define mark - 高度
 //头部高度
@@ -45,6 +45,17 @@
 //其他按钮字体颜色
 #define kSheetOtherTextColor [UIColor colorWithRed:38/255.0f green:51/255.0f blue:76/255.0f alpha:1.0f]
 
+@implementation SHActionSheetModel
+
+- (NSString *)cancel{
+    if (!_cancel.length) {
+        return @"取消";
+    }
+    return _cancel;
+}
+
+@end
+
 @interface SHActionSheetView ()<UITableViewDelegate,UITableViewDataSource> {
     UIView      *_backView;
     UITableView *_actionSheetView;
@@ -52,8 +63,9 @@
     BOOL        _isShow;
 }
 
-//参数
-@property (nonatomic, strong) SHActionSheetViewModel *model;
+//数据
+@property (nonatomic, strong) SHActionSheetModel *model;
+
 //回调
 @property (nonatomic, copy) SHSelectBlock selectBlock;
 
@@ -73,23 +85,13 @@ static NSString * const reuseIdentifier = @"Cell";
     return self;
 }
 
-- (instancetype)initActionSheetWithTitle:(NSString *)title cancel:(NSString *)cancel messageArr:(NSArray *)messageArr specialArr:(NSArray *)specialArr block:(SHSelectBlock)block{
+- (instancetype)initActionSheetWithParam:(SHActionSheetModel *)param block:(SHSelectBlock)block{
     
     self = [self init];
     if (self)
     {
-        //初始化
-        self.model = [[SHActionSheetViewModel alloc]init];
-        //设置标题
-        self.model.title = title;
-        //设置按钮
-        self.model.messageArr = messageArr;
-        //设置特殊按钮
-        self.model.specialArr = specialArr;
-        //设置取消按钮
-        self.model.cancel = cancel?:@"取消";
-        //设置回调
-        self.model.selectBlock = block;
+        self.model = param;
+        self.selectBlock = block;
         
         //蒙版
         _backView = [[UIView alloc] initWithFrame:self.bounds];
@@ -97,12 +99,14 @@ static NSString * const reuseIdentifier = @"Cell";
         _backView.alpha = 0;
         [self addSubview:_backView];
         
+        CGFloat safeBottom = ([UIApplication sharedApplication].statusBarFrame.size.height != 20)?34:0;
+        
         CGFloat width = self.frame.size.width;
         CGFloat height = self.frame.size.height;
         
         //头部+中间最多个点击+分割线+底部
         CGFloat headH = _model.title.length?kSheetHeadHeight:0;
-        CGFloat viewH = ((_model.messageArr.count <= kSheetMaxCellNum)?messageArr.count:kSheetMaxCellNum)*kSheetCellHeight;
+        CGFloat viewH = ((_model.messageArr.count <= kSheetMaxCellNum)?param.messageArr.count:kSheetMaxCellNum)*kSheetCellHeight;
         CGFloat cancelH = kSheetSeparatorHeight + kSheetFootHeight;
         _actionSheetHeight = headH + viewH;
         
@@ -118,7 +122,7 @@ static NSString * const reuseIdentifier = @"Cell";
         [self addSubview:_actionSheetView];
         
         //下方视图
-        UIView *footView = [[UIView alloc]initWithFrame:CGRectMake(0, height - cancelH, self.frame.size.width, cancelH)];
+        UIView *footView = [[UIView alloc]initWithFrame:CGRectMake(0, height - cancelH - safeBottom, self.frame.size.width, cancelH)];
         footView.backgroundColor = kSheetBackColor;
         
         //分割线
@@ -132,18 +136,25 @@ static NSString * const reuseIdentifier = @"Cell";
         cancelBtn.opaque = YES;
         cancelBtn.titleLabel.font = kSheetOtherFontSize;
         [cancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [cancelBtn setTitle:self.model.cancel?: NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
+        [cancelBtn setTitle:self.model.cancel forState:UIControlStateNormal];
         [cancelBtn addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
         [footView addSubview:cancelBtn];
         [self addSubview:footView];
+        
+        //适配全面屏
+        UIView *view = [[UIView alloc]init];
+        view.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - safeBottom, [UIScreen mainScreen].bounds.size.width, safeBottom);
+        view.backgroundColor = kSheetBackColor;
+        [self addSubview:view];
+        
     }
     
     return self;
 }
 
-+ (SHActionSheetView *)showActionSheetWithTitle:(NSString *)title cancel:(NSString *)cancel messageArr:(NSArray *)messageArr specialArr:(NSArray *)specialArr block:(SHSelectBlock)block{
++ (SHActionSheetView *)showActionSheetWithParam:(SHActionSheetModel *)param block:(SHSelectBlock)block{
 
-    SHActionSheetView *sheetView = [[SHActionSheetView alloc] initActionSheetWithTitle:title cancel:cancel messageArr:messageArr specialArr:specialArr block:block];
+    SHActionSheetView *sheetView = [[SHActionSheetView alloc] initActionSheetWithParam:param block:block];
     
     [[[[UIApplication sharedApplication] delegate] window] addSubview:sheetView];
     return sheetView;
@@ -222,8 +233,8 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     //回调
-    if (self.model.selectBlock){
-        self.model.selectBlock(self, indexPath.row);
+    if (self.selectBlock){
+        self.selectBlock(self, indexPath.row);
     }
     
     [self dismiss];
@@ -233,9 +244,9 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)cancelAction:(UIButton *)button {
     
     //回调
-    if (self.model.selectBlock){
+    if (self.selectBlock){
         NSInteger index = button.tag;
-        self.model.selectBlock(self, index);
+        self.selectBlock(self, index);
     }
     
     [self dismiss];

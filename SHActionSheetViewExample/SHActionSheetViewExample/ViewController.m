@@ -23,12 +23,17 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     
     NSMutableArray *messageArr = [[NSMutableArray alloc]init];
-    for (int i = 0 ; i < 20; i++) {
+    for (int i = 0 ; i < 10; i++) {
         
         [messageArr addObject:[NSString stringWithFormat:@"第%d个",i]];
     }
     
-    SHActionSheetView *view = [SHActionSheetView showActionSheetWithTitle:@"标题" cancel:nil messageArr:messageArr specialArr:@[@2,@3] block:^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
+    SHActionSheetModel *model = [[SHActionSheetModel alloc]init];
+    model.title = @"标题";
+    model.messageArr = messageArr;
+    model.specialArr = @[@2,@3];
+    
+    SHActionSheetView *view = [SHActionSheetView showActionSheetWithParam:model block:^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
         NSLog(@"点击%ld",(long)buttonIndex);
     }];
     [view show];
