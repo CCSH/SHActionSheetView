@@ -2,6 +2,7 @@
 自定义提示框
 ****
 # 使用 pod 导入
+[![Pod Version](http://img.shields.io/cocoapods/v/SHActionSheetView.svg?style=flat)](http://cocoadocs.org/docsets/SHActionSheetView/)
 ```
 pod 'SHActionSheetView'
 ```
