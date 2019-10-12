@@ -45,14 +45,14 @@ typedef enum : NSUInteger {
 //参数
 @property (nonatomic, strong) SHActionSheetModel *model;
 //回调
-@property (nonatomic, weak) SHSelectBlock block;
+@property (nonatomic, copy) SHSelectBlock block;
 
+//最多内容个数 默认8
+@property (nonatomic, assign) NSInteger maxNum;
 //风格
 @property (nonatomic, assign) SHActionSheetStyle style;
-//最多内容个数 默认6
-@property (nonatomic, assign) NSInteger maxNum;
 
-// SHActionSheetStyle_default 定制样式配置
+//定制样式配置
 //内容高度 默认 57
 @property (nonatomic, assign) CGFloat contentH;
 //头部高度 默认 57

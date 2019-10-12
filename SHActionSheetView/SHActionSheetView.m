@@ -8,14 +8,14 @@
 
 #import "SHActionSheetView.h"
 
-#pragma mark 颜色
-
-
 @interface SHActionSheetView ()<UITableViewDelegate,UITableViewDataSource>
-
+ //蒙版
 @property (nonatomic, strong) UIView *backView;
+//内容
 @property (nonatomic, strong) UIView *contentView;
+//选项
 @property (nonatomic, strong) UITableView *listView;
+//是否显示
 @property (nonatomic, assign) BOOL isShow;
 
 @end
@@ -55,9 +55,9 @@ static NSString * const reuseIdentifier = @"Cell";
     self.cancelSeparatorColor = [UIColor clearColor];
 }
 
+#pragma mark - 懒加载
 - (UIView *)backView{
     if (!_backView) {
-        //蒙版
         _backView = [[UIView alloc] init];
         _backView.frame = self.bounds;
         [self addSubview:_backView];
@@ -109,7 +109,7 @@ static NSString * const reuseIdentifier = @"Cell";
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = [UIColor whiteColor];
     }
     
     //设置数据
@@ -203,15 +203,16 @@ static NSString * const reuseIdentifier = @"Cell";
             break;
         case SHActionSheetStyle_system:
         {
-            self.listView.layer.cornerRadius = 14;
             
             CGRect frame = self.listView.frame;
-            frame.origin.x = 8;
-            frame.size.width = width - 2*frame.origin.x;
-            self.listView.frame = frame;
-            
-            frame.size.height = self.headH;
-            headView.frame = frame;
+                       frame.origin.x = 8;
+                       frame.size.width = width - 2*frame.origin.x;
+                       self.listView.frame = frame;
+                       
+                       frame.size.height = self.headH;
+                       headView.frame = frame;
+                       
+            self.listView.layer.cornerRadius = 14;
             
             UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:headView.bounds
                                                            byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight
@@ -226,9 +227,6 @@ static NSString * const reuseIdentifier = @"Cell";
         default:
             break;
     }
-    
-    CGFloat safeBottom = ([UIApplication sharedApplication].statusBarFrame.size.height != 20) ? 34 : 0;
-    
     
     //头部+内容+分割线+底部
     CGFloat headH = self.model.title.length ? self.headH : 0;
@@ -247,26 +245,27 @@ static NSString * const reuseIdentifier = @"Cell";
         headView.textAlignment = NSTextAlignmentCenter;
         headView.font = self.titleFont;
         headView.text = self.model.title;
-        headView.layer.cornerRadius = 1;
-        headView.layer.borderColor = self.separatorColor.CGColor;
-        headView.layer.borderWidth = 0.5;
         
+        UIView *line = [[UIView alloc]init];
+        line.frame = CGRectMake(0, self.headH - 0.5, headView.frame.size.width, 0.5);
+        line.backgroundColor = self.separatorColor;
+        [headView addSubview:line];
         
         self.listView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, self.headH)];
+        
+        [self.contentView addSubview:headView];
     }
-    
-    [self.contentView addSubview:headView];
+ 
     
     CGRect frame = self.listView.frame;
     frame.size.height = listH;
     self.listView.frame = frame;
     
+    //选项
     self.listView.backgroundColor = self.listColor;
     self.listView.separatorColor = self.separatorColor;
     [self.listView reloadData];
     view_y = CGRectGetMaxY(self.listView.frame);
-    
-    
     
     //分割线
     UIView *separator = [[UIView alloc]init];
@@ -276,7 +275,8 @@ static NSString * const reuseIdentifier = @"Cell";
     view_y = CGRectGetMaxY(separator.frame);
     
     //取消按钮
-    UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, view_y, width, self.contentH)];
+    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    cancelBtn.frame = CGRectMake(0, view_y, width, self.contentH);
     cancelBtn.backgroundColor = [UIColor whiteColor];
     cancelBtn.tag = -1;
     cancelBtn.opaque = YES;
@@ -288,6 +288,7 @@ static NSString * const reuseIdentifier = @"Cell";
     view_y = CGRectGetMaxY(cancelBtn.frame);
     
     //适配全面屏
+    CGFloat safeBottom = ([UIApplication sharedApplication].statusBarFrame.size.height != 20) ? 34 : 0;
     UIView *safeView = [[UIView alloc]init];
     safeView.frame = CGRectMake(0, view_y, width, safeBottom);
     safeView.backgroundColor = [UIColor whiteColor];
@@ -315,7 +316,6 @@ static NSString * const reuseIdentifier = @"Cell";
             frame.origin.x = 8;
             frame.size.width -= 2*frame.origin.x;
             cancelBtn.frame = frame;
-            
             
             safeView.backgroundColor = [UIColor clearColor];
         }
@@ -350,7 +350,9 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (void)dismiss {
+    
     self.isShow = NO;
+    
     //从上到下
     __block CGRect frame = self.contentView.frame;
     frame.origin.y = self.frame.size.height - self.contentView.frame.size.height;

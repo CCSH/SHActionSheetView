@@ -35,8 +35,7 @@
     
     SHActionSheetView *view = [[SHActionSheetView alloc]init];
     view.model = model;
-//    view.style = SHActionSheetStyle_system;
-    view.contentTextColor = kRGB(54, 90, 247, 1);
+    view.style = SHActionSheetStyle_system;
     [view show];
     
     view.block = ^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
