@@ -33,10 +33,16 @@
     model.messageArr = messageArr;
     model.specialArr = @[@2,@3];
     
-    SHActionSheetView *view = [SHActionSheetView showActionSheetWithParam:model block:^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
-        NSLog(@"点击%ld",(long)buttonIndex);
-    }];
+    SHActionSheetView *view = [[SHActionSheetView alloc]init];
+    view.model = model;
+//    view.style = SHActionSheetStyle_system;
+    view.contentTextColor = kRGB(54, 90, 247, 1);
     [view show];
+    
+    view.block = ^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
+        
+    };
+    
 }
 
 - (void)didReceiveMemoryWarning {

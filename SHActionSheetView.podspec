@@ -3,7 +3,7 @@
 Pod::Spec.new do |s|
 
     s.name         = "SHActionSheetView"
-    s.version      = "1.1.1"
+    s.version      = "1.2.0"
     s.summary      = "SHActionSheetView 弹框"
     s.license      = "MIT"
     s.authors      = { "CSH" => "624089195@qq.com" }

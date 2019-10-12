@@ -7,54 +7,9 @@
 //
 
 #import "SHActionSheetView.h"
-//#import "SHActionSheetModel.h"
 
-#define mark - 高度
-//头部高度
-#define kSheetHeadHeight 48.0f
-//中间高度
-#define kSheetCellHeight 48.0f
-//下方分割高度
-#define kSheetSeparatorHeight 5.0f
-//底部高度
-#define kSheetFootHeight 48.0f
+#pragma mark 颜色
 
-#pragma mark  - 个数
-//最多展示几个选项
-#define kSheetMaxCellNum 6
-
-#pragma mark  - 字体
-//标题字体大小
-#define kSheetTitleFontSize [UIFont systemFontOfSize:13.0f]
-//其他字体大小
-#define kSheetOtherFontSize [UIFont systemFontOfSize:17.0f]
-
-#pragma mark  - 颜色
-//蒙版颜色
-#define kSheetMaskColor [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4]
-//选择栏背景颜色
-#define kSheetBackColor [UIColor whiteColor]
-//提示框下方线颜色
-#define kSheetViewLineColor [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f]
-//下方分割线颜色
-#define kSheetSeparatorColor [UIColor colorWithRed:244.0f/255.0f green:244.0f/255.0f blue:244.0f/255.0f alpha:1.0f]
-//头部标题字体颜色
-#define kSheetHeadTextColor [UIColor blackColor]
-//特殊按钮字体颜色
-#define kSheetSpecialTextColor [UIColor orangeColor]
-//其他按钮字体颜色
-#define kSheetOtherTextColor [UIColor colorWithRed:38/255.0f green:51/255.0f blue:76/255.0f alpha:1.0f]
-
-@implementation SHActionSheetModel
-
-- (NSString *)cancel{
-    if (!_cancel.length) {
-        return @"取消";
-    }
-    return _cancel;
-}
-
-@end
 
 @interface SHActionSheetView ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -63,49 +18,64 @@
 @property (nonatomic, strong) UITableView *listView;
 @property (nonatomic, assign) BOOL isShow;
 
-//数据
-@property (nonatomic, strong) SHActionSheetModel *model;
-
-//回调
-@property (nonatomic, copy) SHSelectBlock selectBlock;
-
 @end
 
 @implementation SHActionSheetView
 
 static NSString * const reuseIdentifier = @"Cell";
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame{
+    
     frame = [UIScreen mainScreen].bounds;
     self = [super initWithFrame:frame];
-    if (self){
+    if (self) {
         
-      
+        [self configData];
     }
     return self;
+}
+
+#pragma mark - 配置默认数据
+- (void)configData{
+    self.maxNum = 6;
+    self.contentH = 57;
+    self.headH = 57;
+    self.separatorH = 10;
+    
+    self.titleFont = [UIFont systemFontOfSize:13];
+    self.contentFont = [UIFont systemFontOfSize:18];
+    self.cancelFont = [UIFont systemFontOfSize:18 weight:UIFontWeightSemibold];
+    self.maskColor = [UIColor colorWithWhite:0 alpha:0.4];
+    
+    self.listColor = [UIColor clearColor];
+    self.separatorColor = [UIColor lightGrayColor];
+    self.headTextColor = [UIColor blackColor];
+    self.specialTextColor = [UIColor redColor];
+    self.contentTextColor = kRGB(54, 90, 247, 1);
+    self.cancelSeparatorColor = [UIColor clearColor];
 }
 
 - (UIView *)backView{
     if (!_backView) {
         //蒙版
-        _backView = [[UIView alloc] initWithFrame:self.bounds];
+        _backView = [[UIView alloc] init];
+        _backView.frame = self.bounds;
         [self addSubview:_backView];
+        [self sendSubviewToBack:_backView];
     }
     return _backView;
 }
 
 - (UITableView *)listView{
     if (!_listView) {
-        
         _listView =  [[UITableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), 0) style:UITableViewStylePlain];
-        _listView.backgroundColor = kSheetBackColor;
         _listView.delegate = self;
         _listView.dataSource = self;
-        _listView.separatorColor = kSheetViewLineColor;
-        _listView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 0);
+        _listView.separatorInset = UIEdgeInsetsZero;
         _listView.showsVerticalScrollIndicator = NO;
         _listView.bounces = NO;
         [self.contentView addSubview:_listView];
+        [self.contentView sendSubviewToBack:_listView];
     }
     return _listView;
 }
@@ -114,92 +84,23 @@ static NSString * const reuseIdentifier = @"Cell";
     if (!_contentView) {
         _contentView = [[UIView alloc]init];
         _contentView.frame = CGRectMake(0, 0, self.frame.size.width, 0);
-        _contentView.backgroundColor = [UIColor orangeColor];
         _contentView.userInteractionEnabled = YES;
         [self addSubview:_contentView];
     }
     return _contentView;
 }
 
-- (instancetype)initActionSheetWithParam:(SHActionSheetModel *)param block:(SHSelectBlock)block{
-    
-    self = [self init];
-    if (self)
-    {
-        self.frame = [UIScreen mainScreen].bounds;
-        self.model = param;
-        self.selectBlock = block;
-        self.backView.backgroundColor = kSheetMaskColor;
-        
-        CGFloat safeBottom = ([UIApplication sharedApplication].statusBarFrame.size.height != 20) ? 34 : 0;
-        
-        CGFloat width = self.frame.size.width;
-        CGFloat height = self.frame.size.height;
-        
-        //头部+内容+分割线+底部
-        CGFloat headH = _model.title.length ? kSheetHeadHeight : 0;
-        CGFloat viewH = MIN(_model.messageArr.count, kSheetMaxCellNum) * kSheetCellHeight;
-        CGFloat listH = headH + viewH;
-        
-        CGFloat view_y = 0;
-        
-        self.listView.frame = CGRectMake(0, view_y, width, listH);
-        view_y = CGRectGetMaxY(self.listView.frame);
-        
-        //分割线
-        UIView *separator = [[UIView alloc]initWithFrame:CGRectMake(0, view_y, width, kSheetSeparatorHeight)];
-        separator.backgroundColor = kSheetSeparatorColor;
-        [self.contentView addSubview:separator];
-        view_y = CGRectGetMaxY(separator.frame);
-        
-        //取消按钮
-        UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, view_y, width, kSheetFootHeight)];
-        cancelBtn.backgroundColor = kSheetBackColor;
-        cancelBtn.tag = -1;
-        cancelBtn.opaque = YES;
-        cancelBtn.titleLabel.font = kSheetOtherFontSize;
-        [cancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-        [cancelBtn setTitle:self.model.cancel forState:UIControlStateNormal];
-        [cancelBtn addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:cancelBtn];
-        view_y = CGRectGetMaxY(cancelBtn.frame);
-        
-        //适配全面屏
-        UIView *safeView = [[UIView alloc]init];
-        safeView.frame = CGRectMake(0, view_y, width, safeBottom);
-        safeView.backgroundColor = kSheetBackColor;
-        [self.contentView addSubview:safeView];
-        view_y = CGRectGetMaxY(safeView.frame);
-        
-        CGRect frame = self.contentView.frame;
-        frame.size.height = view_y;
-        frame.origin.y = height - view_y;
-        
-        self.contentView.frame = frame;
-    }
-    
-    return self;
-}
-
-+ (SHActionSheetView *)showActionSheetWithParam:(SHActionSheetModel *)param block:(SHSelectBlock)block{
-    
-    SHActionSheetView *sheetView = [[SHActionSheetView alloc] initActionSheetWithParam:param block:block];
-    
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:sheetView];
-    return sheetView;
-}
-
 #pragma mark - UITableViewDelegate
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return self.model.messageArr.count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return self.model.title.length?kSheetHeadHeight:0;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return kSheetCellHeight;
+    return self.contentH;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -208,6 +109,7 @@ static NSString * const reuseIdentifier = @"Cell";
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.backgroundColor = [UIColor clearColor];
     }
     
     //设置数据
@@ -218,15 +120,19 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)setCellDataSoureWithCell:(UITableViewCell *)cell IndexPath:(NSIndexPath *)indexPath{
     
-    cell.textLabel.font = kSheetOtherFontSize;
-    cell.textLabel.textColor = kSheetOtherTextColor;
-    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    UILabel *lab = [cell.contentView viewWithTag:10];
+    if (!lab) {
+        lab = [self getContent];
+        [cell.contentView addSubview:lab];
+    }
     
-    id obj = self.model.messageArr[indexPath.row];
+    lab.textColor = self.contentTextColor;
+    
+    id obj = self.model.messageArr[indexPath.section];
     
     for (NSString *index in self.model.specialArr) {
-        if ([index intValue] == indexPath.row) {
-            cell.textLabel.textColor = kSheetSpecialTextColor;
+        if ([index intValue] == indexPath.section) {
+            lab.textColor = self.specialTextColor;
             break;
         }
     }
@@ -234,37 +140,30 @@ static NSString * const reuseIdentifier = @"Cell";
     //设置内容
     if ([obj isKindOfClass:[NSAttributedString class]]) {
         
-        cell.textLabel.attributedText = obj;
+        lab.attributedText = obj;
     }else if ([obj isKindOfClass:[NSString class]]){
         
-        cell.textLabel.text = obj;
+        lab.text = obj;
     }
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    
-    UILabel *headView;
-    
-    if (self.model.title.length) {
-        headView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, kSheetHeadHeight)];
-        headView.backgroundColor = kSheetBackColor;
-        headView.textColor = kSheetHeadTextColor;
-        headView.textAlignment = NSTextAlignmentCenter;
-        headView.font = kSheetOtherFontSize;
-        headView.text = self.model.title;
-        headView.layer.cornerRadius = 1;
-        headView.layer.borderColor = kSheetViewLineColor.CGColor;
-        headView.layer.borderWidth = 0.5;
-    }
-    
-    return headView;
+- (UILabel *)getContent{
+    UILabel *lab = [[UILabel alloc]init];
+    lab.backgroundColor = [UIColor whiteColor];
+    lab.font = self.contentFont;
+    lab.textColor = self.contentTextColor;
+    lab.textAlignment = NSTextAlignmentCenter;
+    lab.numberOfLines = 0;
+    lab.tag = 10;
+    lab.frame = CGRectMake(0, 0, self.listView.frame.size.width, self.contentH);
+    return lab;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     //回调
-    if (self.selectBlock){
-        self.selectBlock(self, indexPath.row);
+    if (self.block){
+        self.block(self, indexPath.section);
     }
     
     [self dismiss];
@@ -274,12 +173,157 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)cancelAction:(UIButton *)button {
     
     //回调
-    if (self.selectBlock){
+    if (self.block){
         NSInteger index = button.tag;
-        self.selectBlock(self, index);
+        self.block(self, index);
     }
     
     [self dismiss];
+}
+
+#pragma mark - 配置UI
+- (void)configUI{
+    
+    //通用处理
+    [[UIApplication sharedApplication].delegate.window addSubview:self];
+    
+    CGFloat width = self.frame.size.width;
+    CGFloat height = self.frame.size.height;
+    
+    UILabel *headView = [[UILabel alloc] init];
+    headView.frame = CGRectMake(0, 0, width, self.headH);
+    
+    self.listView.frame = CGRectMake(0, 0, width, 0);
+    
+    switch (self.style) {
+        case SHActionSheetStyle_custom:
+        {
+            
+        }
+            break;
+        case SHActionSheetStyle_system:
+        {
+            self.listView.layer.cornerRadius = 14;
+            
+            CGRect frame = self.listView.frame;
+            frame.origin.x = 8;
+            frame.size.width = width - 2*frame.origin.x;
+            self.listView.frame = frame;
+            
+            frame.size.height = self.headH;
+            headView.frame = frame;
+            
+            UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:headView.bounds
+                                                           byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight
+                                                                 cornerRadii:CGSizeMake(14, 14)];
+            CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+            maskLayer.frame = headView.bounds;
+            maskLayer.path = maskPath.CGPath;
+            headView.layer.mask = maskLayer;
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    CGFloat safeBottom = ([UIApplication sharedApplication].statusBarFrame.size.height != 20) ? 34 : 0;
+    
+    
+    //头部+内容+分割线+底部
+    CGFloat headH = self.model.title.length ? self.headH : 0;
+    CGFloat viewH = MIN(_model.messageArr.count, self.maxNum) * self.contentH;
+    CGFloat listH = headH + viewH;
+    
+    CGFloat view_y = 0;
+    
+    self.backView.backgroundColor = self.maskColor;
+    
+    //标题
+    if (self.model.title.length) {
+        
+        headView.backgroundColor = [UIColor whiteColor];
+        headView.textColor = self.headTextColor;
+        headView.textAlignment = NSTextAlignmentCenter;
+        headView.font = self.titleFont;
+        headView.text = self.model.title;
+        headView.layer.cornerRadius = 1;
+        headView.layer.borderColor = self.separatorColor.CGColor;
+        headView.layer.borderWidth = 0.5;
+        
+        
+        self.listView.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 0, self.headH)];
+    }
+    
+    [self.contentView addSubview:headView];
+    
+    CGRect frame = self.listView.frame;
+    frame.size.height = listH;
+    self.listView.frame = frame;
+    
+    self.listView.backgroundColor = self.listColor;
+    self.listView.separatorColor = self.separatorColor;
+    [self.listView reloadData];
+    view_y = CGRectGetMaxY(self.listView.frame);
+    
+    
+    
+    //分割线
+    UIView *separator = [[UIView alloc]init];
+    separator.frame = CGRectMake(0, view_y, width, self.separatorH);
+    separator.backgroundColor = self.cancelSeparatorColor;
+    [self.contentView addSubview:separator];
+    view_y = CGRectGetMaxY(separator.frame);
+    
+    //取消按钮
+    UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, view_y, width, self.contentH)];
+    cancelBtn.backgroundColor = [UIColor whiteColor];
+    cancelBtn.tag = -1;
+    cancelBtn.opaque = YES;
+    cancelBtn.titleLabel.font = self.cancelFont;
+    [cancelBtn setTitleColor:self.contentTextColor forState:UIControlStateNormal];
+    [cancelBtn setTitle:self.model.cancel?:@"取消" forState:UIControlStateNormal];
+    [cancelBtn addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:cancelBtn];
+    view_y = CGRectGetMaxY(cancelBtn.frame);
+    
+    //适配全面屏
+    UIView *safeView = [[UIView alloc]init];
+    safeView.frame = CGRectMake(0, view_y, width, safeBottom);
+    safeView.backgroundColor = [UIColor whiteColor];
+    [self.contentView addSubview:safeView];
+    view_y = CGRectGetMaxY(safeView.frame);
+    
+    frame = self.contentView.frame;
+    frame.size.height = view_y;
+    frame.origin.y = height - view_y;
+    
+    self.contentView.frame = frame;
+    
+    
+    switch (self.style) {
+        case SHActionSheetStyle_custom:
+        {
+            
+        }
+            break;
+        case SHActionSheetStyle_system:
+        {
+            cancelBtn.layer.borderColor = [UIColor clearColor].CGColor;
+            cancelBtn.layer.cornerRadius = 14;
+            frame = cancelBtn.frame;
+            frame.origin.x = 8;
+            frame.size.width -= 2*frame.origin.x;
+            cancelBtn.frame = frame;
+            
+            
+            safeView.backgroundColor = [UIColor clearColor];
+        }
+            break;
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - public
@@ -289,6 +333,8 @@ static NSString * const reuseIdentifier = @"Cell";
     }
     
     self.isShow = YES;
+    
+    [self configUI];
     
     //从下到上
     __block CGRect frame = self.contentView.frame;
@@ -319,5 +365,9 @@ static NSString * const reuseIdentifier = @"Cell";
         [self removeFromSuperview];
     }];
 }
+
+@end
+
+@implementation SHActionSheetModel
 
 @end
