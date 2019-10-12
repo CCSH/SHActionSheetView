@@ -31,7 +31,7 @@
 
 #pragma mark  - 颜色
 //蒙版颜色
-#define kSheetMaskColor [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]
+#define kSheetMaskColor [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4]
 //选择栏背景颜色
 #define kSheetBackColor [UIColor whiteColor]
 //提示框下方线颜色
@@ -56,12 +56,12 @@
 
 @end
 
-@interface SHActionSheetView ()<UITableViewDelegate,UITableViewDataSource> {
-    UIView      *_backView;
-    UITableView *_actionSheetView;
-    CGFloat _actionSheetHeight;
-    BOOL        _isShow;
-}
+@interface SHActionSheetView ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UITableView *listView;
+@property (nonatomic, assign) BOOL isShow;
 
 //数据
 @property (nonatomic, strong) SHActionSheetModel *model;
@@ -75,14 +75,50 @@
 
 static NSString * const reuseIdentifier = @"Cell";
 
-- (instancetype)init {
-    self = [super init];
-    if (self)
-    {
-        CGRect frame = [UIScreen mainScreen].bounds;
-        self.frame = frame;
+- (instancetype)initWithFrame:(CGRect)frame {
+    frame = [UIScreen mainScreen].bounds;
+    self = [super initWithFrame:frame];
+    if (self){
+        
+      
     }
     return self;
+}
+
+- (UIView *)backView{
+    if (!_backView) {
+        //蒙版
+        _backView = [[UIView alloc] initWithFrame:self.bounds];
+        [self addSubview:_backView];
+    }
+    return _backView;
+}
+
+- (UITableView *)listView{
+    if (!_listView) {
+        
+        _listView =  [[UITableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), 0) style:UITableViewStylePlain];
+        _listView.backgroundColor = kSheetBackColor;
+        _listView.delegate = self;
+        _listView.dataSource = self;
+        _listView.separatorColor = kSheetViewLineColor;
+        _listView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 0);
+        _listView.showsVerticalScrollIndicator = NO;
+        _listView.bounces = NO;
+        [self.contentView addSubview:_listView];
+    }
+    return _listView;
+}
+
+- (UIView *)contentView{
+    if (!_contentView) {
+        _contentView = [[UIView alloc]init];
+        _contentView.frame = CGRectMake(0, 0, self.frame.size.width, 0);
+        _contentView.backgroundColor = [UIColor orangeColor];
+        _contentView.userInteractionEnabled = YES;
+        [self addSubview:_contentView];
+    }
+    return _contentView;
 }
 
 - (instancetype)initActionSheetWithParam:(SHActionSheetModel *)param block:(SHSelectBlock)block{
@@ -90,70 +126,63 @@ static NSString * const reuseIdentifier = @"Cell";
     self = [self init];
     if (self)
     {
+        self.frame = [UIScreen mainScreen].bounds;
         self.model = param;
         self.selectBlock = block;
+        self.backView.backgroundColor = kSheetMaskColor;
         
-        //蒙版
-        _backView = [[UIView alloc] initWithFrame:self.bounds];
-        _backView.backgroundColor = kSheetMaskColor;
-        _backView.alpha = 0;
-        [self addSubview:_backView];
-        
-        CGFloat safeBottom = ([UIApplication sharedApplication].statusBarFrame.size.height != 20)?34:0;
+        CGFloat safeBottom = ([UIApplication sharedApplication].statusBarFrame.size.height != 20) ? 34 : 0;
         
         CGFloat width = self.frame.size.width;
         CGFloat height = self.frame.size.height;
         
-        //头部+中间最多个点击+分割线+底部
-        CGFloat headH = _model.title.length?kSheetHeadHeight:0;
-        CGFloat viewH = ((_model.messageArr.count <= kSheetMaxCellNum)?param.messageArr.count:kSheetMaxCellNum)*kSheetCellHeight;
-        CGFloat cancelH = kSheetSeparatorHeight + kSheetFootHeight;
-        _actionSheetHeight = headH + viewH;
+        //头部+内容+分割线+底部
+        CGFloat headH = _model.title.length ? kSheetHeadHeight : 0;
+        CGFloat viewH = MIN(_model.messageArr.count, kSheetMaxCellNum) * kSheetCellHeight;
+        CGFloat listH = headH + viewH;
         
-        //选择视图
-        _actionSheetView = [[UITableView alloc] initWithFrame:CGRectMake(0,height - _actionSheetHeight - cancelH , width, _actionSheetHeight) style:UITableViewStylePlain];
-        _actionSheetView.backgroundColor = kSheetBackColor;
-        _actionSheetView.delegate = self;
-        _actionSheetView.dataSource = self;
-        _actionSheetView.separatorColor = kSheetViewLineColor;
-        _actionSheetView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 0);
-        _actionSheetView.showsVerticalScrollIndicator = NO;
-        _actionSheetView.bounces = NO;
-        [self addSubview:_actionSheetView];
+        CGFloat view_y = 0;
         
-        //下方视图
-        UIView *footView = [[UIView alloc]initWithFrame:CGRectMake(0, height - cancelH - safeBottom, self.frame.size.width, cancelH)];
-        footView.backgroundColor = kSheetBackColor;
+        self.listView.frame = CGRectMake(0, view_y, width, listH);
+        view_y = CGRectGetMaxY(self.listView.frame);
         
         //分割线
-        UIView *separator = [[UIView alloc]initWithFrame:CGRectMake(0, 0, footView.frame.size.width, kSheetSeparatorHeight)];
+        UIView *separator = [[UIView alloc]initWithFrame:CGRectMake(0, view_y, width, kSheetSeparatorHeight)];
         separator.backgroundColor = kSheetSeparatorColor;
-        [footView addSubview:separator];
+        [self.contentView addSubview:separator];
+        view_y = CGRectGetMaxY(separator.frame);
         
         //取消按钮
-        UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, kSheetSeparatorHeight, footView.frame.size.width, kSheetFootHeight)];
+        UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, view_y, width, kSheetFootHeight)];
+        cancelBtn.backgroundColor = kSheetBackColor;
         cancelBtn.tag = -1;
         cancelBtn.opaque = YES;
         cancelBtn.titleLabel.font = kSheetOtherFontSize;
         [cancelBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [cancelBtn setTitle:self.model.cancel forState:UIControlStateNormal];
         [cancelBtn addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
-        [footView addSubview:cancelBtn];
-        [self addSubview:footView];
+        [self.contentView addSubview:cancelBtn];
+        view_y = CGRectGetMaxY(cancelBtn.frame);
         
         //适配全面屏
-        UIView *view = [[UIView alloc]init];
-        view.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - safeBottom, [UIScreen mainScreen].bounds.size.width, safeBottom);
-        view.backgroundColor = kSheetBackColor;
-        [self addSubview:view];
+        UIView *safeView = [[UIView alloc]init];
+        safeView.frame = CGRectMake(0, view_y, width, safeBottom);
+        safeView.backgroundColor = kSheetBackColor;
+        [self.contentView addSubview:safeView];
+        view_y = CGRectGetMaxY(safeView.frame);
         
+        CGRect frame = self.contentView.frame;
+        frame.size.height = view_y;
+        frame.origin.y = height - view_y;
+        
+        self.contentView.frame = frame;
     }
     
     return self;
 }
 
 + (SHActionSheetView *)showActionSheetWithParam:(SHActionSheetModel *)param block:(SHSelectBlock)block{
-
+    
     SHActionSheetView *sheetView = [[SHActionSheetView alloc] initActionSheetWithParam:param block:block];
     
     [[[[UIApplication sharedApplication] delegate] window] addSubview:sheetView];
@@ -178,6 +207,7 @@ static NSString * const reuseIdentifier = @"Cell";
     
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     //设置数据
@@ -252,50 +282,42 @@ static NSString * const reuseIdentifier = @"Cell";
     [self dismiss];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [touch locationInView:_backView];
-    if (!CGRectContainsPoint([_actionSheetView frame], point))
-    {
-        [self dismiss];
-    }
-}
-
 #pragma mark - public
 - (void)show {
-    if(_isShow) return;
+    if(self.isShow) {
+        return;
+    }
     
-    _isShow = YES;
+    self.isShow = YES;
     
-    _actionSheetView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, _actionSheetHeight);
+    //从下到上
+    __block CGRect frame = self.contentView.frame;
+    frame.origin.y = self.frame.size.height;
+    self.contentView.frame = frame;
+    self.backView.alpha = 1;
     
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
+        frame.origin.y = self.frame.size.height - self.contentView.frame.size.height;
+        self.contentView.frame = frame;
         
-        self->_actionSheetView.frame = CGRectMake(0,self.frame.size.height - (self->_actionSheetHeight + kSheetSeparatorHeight + kSheetFootHeight) , self.frame.size.width, self->_actionSheetHeight);
-        self->_backView.alpha = 1;
     } completion:NULL];
 }
 
 - (void)dismiss {
-    _isShow = NO;
+    self.isShow = NO;
+    //从上到下
+    __block CGRect frame = self.contentView.frame;
+    frame.origin.y = self.frame.size.height - self.contentView.frame.size.height;
+    self.contentView.frame = frame;
+    self.backView.alpha = 1;
     
-    [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
-        
-        self->_backView.alpha = 0.0;
-        self->_actionSheetView.frame = CGRectMake(0,self.frame.size.height , self.frame.size.width, self->_actionSheetHeight);
-        
+    [UIView animateWithDuration:0.25 animations:^{
+        frame.origin.y = self.frame.size.height;
+        self.contentView.frame = frame;
+        self.backView.alpha = 0;
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
-}
-
-#pragma mark - 销毁
-- (void)dealloc {
-    self.model= nil;
-    
-    _actionSheetView = nil;
-    _backView = nil;
 }
 
 @end
