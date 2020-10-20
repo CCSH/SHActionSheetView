@@ -1,0 +1,30 @@
+PODS:
+  - SHExtension (1.1.0):
+    - SHExtension/NSString (= 1.1.0)
+    - SHExtension/Tool (= 1.1.0)
+    - SHExtension/UIButton (= 1.1.0)
+    - SHExtension/UIColor (= 1.1.0)
+    - SHExtension/UIImage (= 1.1.0)
+    - SHExtension/UIImageView (= 1.1.0)
+    - SHExtension/UIView (= 1.1.0)
+  - SHExtension/NSString (1.1.0)
+  - SHExtension/Tool (1.1.0)
+  - SHExtension/UIButton (1.1.0)
+  - SHExtension/UIColor (1.1.0)
+  - SHExtension/UIImage (1.1.0)
+  - SHExtension/UIImageView (1.1.0)
+  - SHExtension/UIView (1.1.0)
+
+DEPENDENCIES:
+  - SHExtension
+
+SPEC REPOS:
+  trunk:
+    - SHExtension
+
+SPEC CHECKSUMS:
+  SHExtension: 4954f7c07cf43efbc430004a2c253c0e20d1a81d
+
+PODFILE CHECKSUM: a2ac3bc13a38d9a4e33213a6d6912691f72a56b9
+
+COCOAPODS: 1.10.0.rc.1

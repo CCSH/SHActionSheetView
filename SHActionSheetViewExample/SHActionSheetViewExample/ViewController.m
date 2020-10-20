@@ -24,24 +24,23 @@
     
     NSMutableArray *messageArr = [[NSMutableArray alloc]init];
     for (int i = 0 ; i < 10; i++) {
-        
+
         [messageArr addObject:[NSString stringWithFormat:@"第%d个",i]];
     }
-    
+
     SHActionSheetModel *model = [[SHActionSheetModel alloc]init];
     model.title = @"标题";
     model.messageArr = messageArr;
     model.specialArr = @[@2,@3];
-    
+
     SHActionSheetView *view = [[SHActionSheetView alloc]init];
     view.model = model;
     view.style = SHActionSheetStyle_system;
     [view show];
-    
+
     view.block = ^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
-        
+
     };
-    
 }
 
 - (void)didReceiveMemoryWarning {

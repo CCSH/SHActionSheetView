@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D19B41E8E853124399413B7 /* libPods-SHActionSheetViewExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 581DDBC53776F73F06ABAD75 /* libPods-SHActionSheetViewExample.a */; };
 		5CC96B29212541E100E78A40 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B28212541E100E78A40 /* AppDelegate.m */; };
 		5CC96B2C212541E100E78A40 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CC96B2B212541E100E78A40 /* ViewController.m */; };
 		5CC96B2F212541E100E78A40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CC96B2D212541E100E78A40 /* Main.storyboard */; };
@@ -36,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1263FCD63508F62BA868B0A3 /* Pods-SHActionSheetViewExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SHActionSheetViewExample.release.xcconfig"; path = "Target Support Files/Pods-SHActionSheetViewExample/Pods-SHActionSheetViewExample.release.xcconfig"; sourceTree = "<group>"; };
+		581DDBC53776F73F06ABAD75 /* libPods-SHActionSheetViewExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SHActionSheetViewExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CC96B24212541E100E78A40 /* SHActionSheetViewExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SHActionSheetViewExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CC96B27212541E100E78A40 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5CC96B28212541E100E78A40 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -54,6 +57,7 @@
 		5CC96B4D212541E200E78A40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5CC96B622125476600E78A40 /* SHActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SHActionSheetView.m; sourceTree = "<group>"; };
 		5CC96B642125476600E78A40 /* SHActionSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHActionSheetView.h; sourceTree = "<group>"; };
+		ACE0E7CC9405B0BB6C6A0381 /* Pods-SHActionSheetViewExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SHActionSheetViewExample.debug.xcconfig"; path = "Target Support Files/Pods-SHActionSheetViewExample/Pods-SHActionSheetViewExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D19B41E8E853124399413B7 /* libPods-SHActionSheetViewExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +86,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1521363132EF4F2B716463A7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ACE0E7CC9405B0BB6C6A0381 /* Pods-SHActionSheetViewExample.debug.xcconfig */,
+				1263FCD63508F62BA868B0A3 /* Pods-SHActionSheetViewExample.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		5CC96B1B212541E100E78A40 = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +103,8 @@
 				5CC96B3F212541E200E78A40 /* SHActionSheetViewExampleTests */,
 				5CC96B4A212541E200E78A40 /* SHActionSheetViewExampleUITests */,
 				5CC96B25212541E100E78A40 /* Products */,
+				1521363132EF4F2B716463A7 /* Pods */,
+				7AE02F257E35A027447F6887 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -145,6 +162,14 @@
 			path = SHActionSheetView;
 			sourceTree = "<group>";
 		};
+		7AE02F257E35A027447F6887 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				581DDBC53776F73F06ABAD75 /* libPods-SHActionSheetViewExample.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -152,6 +177,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5CC96B50212541E200E78A40 /* Build configuration list for PBXNativeTarget "SHActionSheetViewExample" */;
 			buildPhases = (
+				324580E66AD8F7D66EDB60B2 /* [CP] Check Pods Manifest.lock */,
 				5CC96B20212541E100E78A40 /* Sources */,
 				5CC96B21212541E100E78A40 /* Frameworks */,
 				5CC96B22212541E100E78A40 /* Resources */,
@@ -269,6 +295,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		324580E66AD8F7D66EDB60B2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SHActionSheetViewExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5CC96B20212541E100E78A40 /* Sources */ = {
@@ -445,10 +496,12 @@
 		};
 		5CC96B51212541E200E78A40 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACE0E7CC9405B0BB6C6A0381 /* Pods-SHActionSheetViewExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = SHActionSheetViewExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -461,10 +514,12 @@
 		};
 		5CC96B52212541E200E78A40 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1263FCD63508F62BA868B0A3 /* Pods-SHActionSheetViewExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = SHActionSheetViewExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
