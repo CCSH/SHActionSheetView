@@ -14,8 +14,6 @@
 #define kRGB(R, G, B, A) [UIColor colorWithRed:R / 255.0 green:G / 255.0 blue:B / 255.0 alpha:A]
 
 @interface SHActionSheetView () < UITableViewDelegate, UITableViewDataSource >
-//蒙版
-@property (nonatomic, strong) UIView *backView;
 //内容
 @property (nonatomic, strong) UIView *contentView;
 //选项
@@ -47,7 +45,7 @@ static NSString *const reuseIdentifier = @"Cell";
 
     self.contentH = 57;
     self.headH = 57;
-    self.separatorH = 10;
+    self.separatorH = 3;
 
     self.titleFont = [UIFont systemFontOfSize:14];
     self.contentFont = [UIFont systemFontOfSize:16];
@@ -60,20 +58,14 @@ static NSString *const reuseIdentifier = @"Cell";
     self.specialTextColor = [UIColor redColor];
     self.contentTextColor = kRGB(65, 139, 243, 1);
     self.cancelSeparatorColor = [UIColor clearColor];
+    
+    self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelAction)];
+    [self addGestureRecognizer:tap];
 }
 
 #pragma mark - 懒加载
-- (UIView *)backView
-{
-    if (!_backView)
-    {
-        _backView = [[UIView alloc] init];
-        _backView.frame = self.bounds;
-        [self addSubview:_backView];
-        [self sendSubviewToBack:_backView];
-    }
-    return _backView;
-}
 
 - (UITableView *)listView
 {
@@ -216,13 +208,12 @@ static NSString *const reuseIdentifier = @"Cell";
 }
 
 #pragma mark - 取消点击
-- (void)cancelAction:(UIButton *)button
+- (void)cancelAction
 {
     //回调
     if (self.block)
     {
-        NSInteger index = button.tag;
-        self.block(self, index);
+        self.block(self, -1);
     }
 
     [self dismiss];
@@ -234,7 +225,7 @@ static NSString *const reuseIdentifier = @"Cell";
     //通用处理
     [[UIApplication sharedApplication].delegate.window addSubview:self];
 
-    self.backView.backgroundColor = self.maskColor;
+    self.backgroundColor = self.maskColor;
 
     //标题
     if (!self.model.title)
@@ -257,7 +248,6 @@ static NSString *const reuseIdentifier = @"Cell";
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     cancelBtn.frame = CGRectMake(0, separator.maxY, self.width, self.contentH);
     cancelBtn.backgroundColor = self.listColor;
-    cancelBtn.tag = -1;
     cancelBtn.opaque = YES;
     cancelBtn.titleLabel.font = self.cancelFont;
     [cancelBtn setTitleColor:self.contentTextColor forState:UIControlStateNormal];
@@ -265,7 +255,7 @@ static NSString *const reuseIdentifier = @"Cell";
     if ([self.model.cancel isKindOfClass:[NSAttributedString class]]) {
         [cancelBtn setAttributedTitle:self.model.cancel forState:UIControlStateNormal];
     }
-    [cancelBtn addTarget:self action:@selector(cancelAction:) forControlEvents:UIControlEventTouchUpInside];
+    [cancelBtn addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:cancelBtn];
 
     //适配全面屏
@@ -322,7 +312,7 @@ static NSString *const reuseIdentifier = @"Cell";
     __block CGRect frame = self.contentView.frame;
     frame.origin.y = self.frame.size.height;
     self.contentView.frame = frame;
-    self.backView.alpha = 1;
+    self.alpha = 1;
 
     [UIView animateWithDuration:0.35f
                           delay:0
@@ -344,13 +334,13 @@ static NSString *const reuseIdentifier = @"Cell";
     __block CGRect frame = self.contentView.frame;
     frame.origin.y = self.frame.size.height - self.contentView.frame.size.height;
     self.contentView.frame = frame;
-    self.backView.alpha = 1;
+    self.alpha = 1;
 
     [UIView animateWithDuration:0.25
         animations:^{
           frame.origin.y = self.frame.size.height;
           self.contentView.frame = frame;
-          self.backView.alpha = 0;
+          self.alpha = 0;
         }
         completion:^(BOOL finished) {
           [self removeFromSuperview];

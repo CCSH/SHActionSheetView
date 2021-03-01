@@ -12,7 +12,6 @@
 //回调
 typedef void (^SHSelectBlock)(SHActionSheetView *sheetView, NSInteger buttonIndex);
 
-
 /**
  Model
  */
@@ -31,6 +30,7 @@ typedef void (^SHSelectBlock)(SHActionSheetView *sheetView, NSInteger buttonInde
 typedef enum : NSUInteger {
     SHActionSheetStyle_custom, //自定义
     SHActionSheetStyle_system, //系统
+    SHActionSheetStyle_bottom, //系统
 } SHActionSheetStyle;
 
 /**
@@ -53,7 +53,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) CGFloat headH;
 //内容高度 默认 50
 @property (nonatomic, assign) CGFloat contentH;
-//取消上方分割高度 默认 10
+//取消上方分割高度 默认 3
 @property (nonatomic, assign) CGFloat separatorH;
 
 //标题字体 默认 16
@@ -63,7 +63,7 @@ typedef enum : NSUInteger {
 //取消字体 默认 18 中粗体
 @property (nonatomic, strong) UIFont *cancelFont;
 
-//蒙版颜色 默认 [UIColor colorWithWhite:0 alpha:0.4]
+//蒙版颜色 默认 [[UIColor blackColor] colorWithAlphaComponent:0.3]
 @property (nonatomic, strong) UIColor *maskColor;
 //列表颜色 默认 whiteColor
 @property (nonatomic, strong) UIColor *listColor;
