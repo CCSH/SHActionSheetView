@@ -197,7 +197,7 @@ static NSString *const reuseIdentifier = @"Cell";
     //回调
     if (self.block)
     {
-        self.block(self, indexPath.section);
+        self.block(self, indexPath.row);
     }
 
     [self dismiss];
