@@ -11,8 +11,6 @@
 #import "SHActionSheetView.h"
 #import <UIView+SHExtension.h>
 
-#define kRGB(R, G, B) [UIColor colorWithRed:R / 255.0 green:G / 255.0 blue:B / 255.0 alpha:1]
-
 @interface SHActionSheetView () < UITableViewDelegate, UITableViewDataSource >
 //内容
 @property (nonatomic, strong) UIView *contentView;
@@ -50,16 +48,16 @@ static NSString *const reuseIdentifier = @"Cell";
     self.titleFont = [UIFont systemFontOfSize:14];
     self.contentFont = [UIFont systemFontOfSize:16];
     self.cancelFont = [UIFont systemFontOfSize:18 weight:UIFontWeightSemibold];
-    self.maskColor = [UIColor colorWithWhite:0 alpha:0.4];
-
-    self.listColor = [UIColor whiteColor];
-    self.separatorColor = [UIColor lightGrayColor];
-    self.headTextColor = [UIColor blackColor];
-    self.specialTextColor = [UIColor redColor];
-    self.contentTextColor = kRGB(65, 139, 243);
-    self.cancelSeparatorColor = [UIColor clearColor];
     
-    self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+    self.maskColor = [UIColor colorWithWhite:0 alpha:0.3];
+    self.listColor = [UIColor whiteColor];
+    self.headTextColor = [UIColor blackColor];
+    self.contentTextColor = [UIColor grayColor];
+    self.specialTextColor = [UIColor redColor];
+    self.cancelTextColor = [UIColor blackColor];
+    
+    self.separatorColor = [UIColor colorWithWhite:0.7 alpha:1];
+    self.cancelSeparatorColor = [UIColor clearColor];
 }
 
 #pragma mark - 懒加载
@@ -246,7 +244,7 @@ static NSString *const reuseIdentifier = @"Cell";
     cancelBtn.backgroundColor = self.listColor;
     cancelBtn.opaque = YES;
     cancelBtn.titleLabel.font = self.cancelFont;
-    [cancelBtn setTitleColor:self.contentTextColor forState:UIControlStateNormal];
+    [cancelBtn setTitleColor:self.cancelTextColor forState:UIControlStateNormal];
     [cancelBtn setTitle:self.model.cancel ?: @"取消" forState:UIControlStateNormal];
     if ([self.model.cancel isKindOfClass:[NSAttributedString class]]) {
         [cancelBtn setAttributedTitle:self.model.cancel forState:UIControlStateNormal];
@@ -266,10 +264,6 @@ static NSString *const reuseIdentifier = @"Cell";
 
     switch (self.style)
     {
-        case SHActionSheetStyle_custom:
-        {
-        }
-        break;
         case SHActionSheetStyle_system:
         {
             self.listView.x = 10;

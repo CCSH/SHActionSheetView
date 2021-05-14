@@ -24,7 +24,6 @@
     
     NSMutableArray *messageArr = [[NSMutableArray alloc]init];
     for (int i = 0 ; i < 10; i++) {
-
         [messageArr addObject:[NSString stringWithFormat:@"第%d个",i]];
     }
 
