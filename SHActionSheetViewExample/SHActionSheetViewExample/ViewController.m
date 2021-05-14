@@ -35,7 +35,7 @@
 
     SHActionSheetView *view = [[SHActionSheetView alloc]init];
     view.model = model;
-    view.style = SHActionSheetStyle_custom;
+    view.style = SHActionSheetStyle_system;
     [view show];
 
     view.block = ^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
