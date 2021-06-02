@@ -43,6 +43,8 @@ typedef enum : NSUInteger {
 @property (nonatomic, copy) SHSelectBlock block;
 //风格
 @property (nonatomic, assign) SHActionSheetStyle style;
+//点击背景消失
+@property (nonatomic, assign) BOOL isClickDisappear;
 
 //最多内容个数 默认8
 @property (nonatomic, assign) NSInteger maxNum;

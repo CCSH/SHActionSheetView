@@ -11,7 +11,7 @@
 #import "SHActionSheetView.h"
 #import <UIView+SHExtension.h>
 
-@interface SHActionSheetView () < UITableViewDelegate, UITableViewDataSource >
+@interface SHActionSheetView () < UITableViewDelegate, UITableViewDataSource ,UIGestureRecognizerDelegate>
 //内容
 @property (nonatomic, strong) UIView *contentView;
 //选项
@@ -36,9 +36,18 @@ static NSString *const reuseIdentifier = @"Cell";
     return self;
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    if ([touch.view isDescendantOfView:self.contentView]) {
+        return NO;
+    }
+    return YES;
+}
+
 #pragma mark - 配置默认数据
 - (void)configData
 {
+    self.isClickDisappear = YES;
     self.maxNum = 8;
 
     self.contentH = 57;
@@ -220,6 +229,13 @@ static NSString *const reuseIdentifier = @"Cell";
     [[UIApplication sharedApplication].delegate.window addSubview:self];
 
     self.backgroundColor = self.maskColor;
+    
+    if (self.isClickDisappear) {
+        //点击消失
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelAction)];
+        tap.delegate = self;
+        [self addGestureRecognizer:tap];
+    }
 
     //标题
     if (!self.model.title)

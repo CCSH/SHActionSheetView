@@ -42,18 +42,18 @@
 		1729DA5B3E4E8CE8B80F3619277199D7 /* UIImageView+SHExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+SHExtension.m"; path = "SHExtension/UIImageView+SHExtension.m"; sourceTree = "<group>"; };
 		1BB323C9A4310C05C767432A715DC76B /* Pods-SHActionSheetViewExample-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-SHActionSheetViewExample-acknowledgements.plist"; sourceTree = "<group>"; };
 		2732A285531A515CCEE26CA55A69602E /* UIColor+SHExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIColor+SHExtension.h"; path = "SHExtension/UIColor+SHExtension.h"; sourceTree = "<group>"; };
-		2A330E4DC4F8C0B948FD62F24A62B8E3 /* libSHExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libSHExtension.a; path = libSHExtension.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A330E4DC4F8C0B948FD62F24A62B8E3 /* libSHExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSHExtension.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D481C1727BE907C92ADD500E4B46510 /* NSString+SHExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+SHExtension.h"; path = "SHExtension/NSString+SHExtension.h"; sourceTree = "<group>"; };
 		322FFFFB20FC7522482BC3827DF4540C /* UIImageView+SHExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+SHExtension.h"; path = "SHExtension/UIImageView+SHExtension.h"; sourceTree = "<group>"; };
 		3D989DECB8DA7F6B80E79EDF095F3C90 /* SHExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SHExtension.release.xcconfig; sourceTree = "<group>"; };
 		531D90EF8CF466837DA83F1E6B9D8F07 /* UIView+SHExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+SHExtension.h"; path = "SHExtension/UIView+SHExtension.h"; sourceTree = "<group>"; };
 		5F41BC8B463B0C8EE8F43139DC388B89 /* SHTool.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SHTool.m; path = SHExtension/SHTool.m; sourceTree = "<group>"; };
-		70334C9DF85E6F8EA3BD53309DB88C9C /* libPods-SHActionSheetViewExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-SHActionSheetViewExample.a"; path = "libPods-SHActionSheetViewExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		70334C9DF85E6F8EA3BD53309DB88C9C /* libPods-SHActionSheetViewExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SHActionSheetViewExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		71FC39E8A8EFC72F2143CC3201CBC897 /* UIView+SHExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+SHExtension.m"; path = "SHExtension/UIView+SHExtension.m"; sourceTree = "<group>"; };
 		877BCC545486EFC81A252875C78323F7 /* UIButton+SHExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIButton+SHExtension.m"; path = "SHExtension/UIButton+SHExtension.m"; sourceTree = "<group>"; };
 		90A1A888B0E3FD52D82921593316DDE3 /* SHTool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SHTool.h; path = SHExtension/SHTool.h; sourceTree = "<group>"; };
 		9D45F93A616760B6C344A9B2015743C4 /* UIImage+SHExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+SHExtension.m"; path = "SHExtension/UIImage+SHExtension.m"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A9F37FCE403295580A7915E739F70F79 /* Pods-SHActionSheetViewExample-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-SHActionSheetViewExample-dummy.m"; sourceTree = "<group>"; };
 		E1639EB257D7FB1FE8A38A111DB98B24 /* NSString+SHExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+SHExtension.m"; path = "SHExtension/NSString+SHExtension.m"; sourceTree = "<group>"; };
 		E79A67C79427CF2D59E58C022E1A911D /* UIColor+SHExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIColor+SHExtension.m"; path = "SHExtension/UIColor+SHExtension.m"; sourceTree = "<group>"; };
@@ -146,7 +146,6 @@
 				7F1A89E6BEA75EAB0376525ECE6BC50E /* UIImageView */,
 				A7D111AEAEBF561CFDD4A6B1B4A7F25E /* UIView */,
 			);
-			name = SHExtension;
 			path = SHExtension;
 			sourceTree = "<group>";
 		};
@@ -298,7 +297,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1250;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 9.3";
@@ -363,7 +362,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/SHExtension/SHExtension-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";
@@ -386,7 +385,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
@@ -448,7 +447,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -469,7 +468,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
@@ -535,7 +534,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -556,7 +555,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				GCC_PREFIX_HEADER = "Target Support Files/SHExtension/SHExtension-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PRIVATE_HEADERS_FOLDER_PATH = "";

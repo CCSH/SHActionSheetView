@@ -38,7 +38,7 @@
     [view show];
 
     view.block = ^(SHActionSheetView *sheetView, NSInteger buttonIndex) {
-
+        NSLog(@"点击了===%ld",(long)buttonIndex);
     };
 }
 
